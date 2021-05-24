@@ -15,4 +15,5 @@
   - 算法大赛1网址：https://tianchi.aliyun.com/competition/entrance/231576/information
   - 算法大赛2网址：https://tianchi.aliyun.com/competition/entrance/231784/information
   - 两场比赛的成绩截图：
-    ![两场比赛的成绩截图](https://user-images.githubusercontent.com/66198938/119350363-cf7a0800-bcd1-11eb-99a0-237377d405d4.png)
+    ![image](https://user-images.githubusercontent.com/66198938/119350891-6e066900-bcd2-11eb-96ae-790a1f17a454.png)
+

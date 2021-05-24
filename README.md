@@ -14,7 +14,7 @@
   - 推荐系统项目、算法大赛笔记都在本仓库中
   - 算法大赛1网址：https://tianchi.aliyun.com/competition/entrance/231576/information
   - 算法大赛2网址：https://tianchi.aliyun.com/competition/entrance/231784/information
-  - 两场比赛的成绩截图：
-  - 
+  - 两场比赛的成绩截图（名字类似本人豆瓣昵称https://www.douban.com/people/181585360/）：
+  
     ![image](https://user-images.githubusercontent.com/66198938/119350891-6e066900-bcd2-11eb-96ae-790a1f17a454.png)
 

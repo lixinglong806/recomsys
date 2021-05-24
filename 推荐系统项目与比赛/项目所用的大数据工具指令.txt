@@ -1,0 +1,105 @@
+//***********运行/停止hadoop********//
+/root/bigdata/hadoop/
+sbin/start-dfs.sh
+sbin/start-yarn.sh
+sbin/mr-jobhistory-daemon.sh start historyserver
+Start改为stop就是停止，status就是状态。
+sbin/stop-dfs.sh
+sbin/stop-yarn.sh
+sbin/mr-jobhistory-daemon.sh stop historyserver
+
+			
+//**************开启mysql***********//
+service docker start
+docker start mysql
+docker exec -ti mysql bash
+docker exec -ti mysql env LANG=C.UTF-8 bash
+root@eb3dbfb0958f:/# mysql -uroot -p
+Enter password: password
+
+
+			
+//**************开启hive************//
+启动hadoop、yarn
+service docker start
+docker start mysql
+hive --service metastore&
+hive
+关闭的时候可kill端口
+
+			
+//**********开启hbase 自带zookeeper**********//
+启动hadoop、yarn
+进入hbase/bin
+./start-hbase.sh
+hbase shell
+进入shell命令行输入list如果遇到异常，再次启动/.start-hbase.sh，需要在slave节点上看到zookeeper和heregion运行
+
+关闭
+./stop-hbase.sh
+
+hbase关闭slave的regionserver RegionServer
+进入hbase/bin,执行 ./hbase-daemon.sh stop regionserver RegionServer
+
+//*****************启动spark*****************//
+/local模式
+pyspark
+跑起来后 可在网页查看 192.168.58.100:4040
+/集群模式 worker master
+进入到$SPARK_HOME/sbin目录
+./start-master.sh -h 192.168.58.100
+./start-slaves.sh spark://192.168.58.100:7077
+
+./stop-slaves.sh spark://192.168.58.100:7077
+./stop-master.sh -h 192.168.58.100
+
+//*****************启动redis*****************//
+进入路径/var/lib/redis
+redis-server &  加上`&`号使redis以后台程序方式运行
+ps -ef |grep redis 检测后台进程是否存在
+netstat -lntp | grep 6379 检测6379端口是否在监听
+redis-cli  使用redis-cli客户端检测连接是否正常
+
+停止redis：
+使用客户端redis-cli 
+shutdown
+或者kill -9
+外界连此redis要关闭保护模式
+127.0.0.1:6379> config set protected-mode "no"
+ok
+
+//*************启动flume对点击流日志进行采集***********//
+分别发送到kafka和hdfs：
+flume-ng agent -f /root/bigdata/flume/conf/click_trace_log_hdfs.properties -n a1
+
+//*****************开关kafka*****************//
+/开启
+cd /root/bigdata/kafka
+bin/zookeeper-server-start.sh -daemon config/zookeeper.properties
+bin/kafka-server-start.sh config/server.properties
+/关闭
+cd /root/bigdata/kafka
+bin/zookeeper-server-stop.sh
+bin/kafka-server-stop.sh
+
+//***************linux启动jupyter notebook***********//
+不在本地运行，远程登录
+source activate py365
+（退出激活状态 conda deactivate ）
+jupyter notebook --ip 0.0.0.0
+jupyter notebook --ip 0.0.0.0 --allow-root
+http://(hadoop-master or 127.0.0.1):8888/?token=b728f255fea142bdc4a02196fb1132fef6e82f40bd724f7b
+打开jupyter notebook后，加上！就可以执行linux指令了
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,202 @@
+ 推荐系统工具surprise：svd 、baseline、slopeone、协同过滤
+
+* baseline
+
+  ```python
+  from surprise import Reader
+  from surprise import BaselineOnly, KNNBasic
+  from surprise import accuracy
+  from surprise.model_selection import KFold
+  # 数据读取
+  reader = Reader(line_format='user item rating timestamp', sep=',', skip_lines=1)
+  data = Dataset.load_from_file('./ratings.csv', reader=reader)
+  train_set = data.build_full_trainset()
+  # Baseline算法，使用ALS进行优化
+  '''
+  ALS参数:
+  reg_i：物品的正则化参数，默认为10。
+  reg_u：用户的正则化参数，默认为15 。
+  n_epochs：迭代次数，默认为10
+  
+  '''
+  bsl_options = {'method': 'als','n_epochs': 5,'reg_u': 12,'reg_i': 5}
+  '''
+  # Baseline算法，使用ALS进行优化
+  bsl_options = {'method': 'als','n_epochs': 5,'reg_u': 12,'reg_i': 5}
+  SGD参数:
+  reg：代价函数的正则化项，默认为0.02。
+  learning_rate：学习率，默认为0.005。
+  n_epochs：迭代次数，默认为20。
+  '''
+  algo = BaselineOnly(bsl_options=bsl_options)
+  # 定义K折交叉验证迭代器，K=3
+  kf = KFold(n_splits=3)
+  for trainset, testset in kf.split(data):
+      algo.fit(trainset)
+      predictions = algo.test(testset)
+      accuracy.rmse(predictions, verbose=True)
+  uid = str(196)
+  iid = str(302)
+  pred = algo.predict(uid, iid, r_ui=4, verbose=True)
+  
+  ```
+
+  
+
+* CF 基于KNN的协同过滤
+
+  * knns.KNNBasic
+  * knns.KNNWithMeans
+  * knns.KNNWithZScore
+  * knns.KNNBaseline
+
+  ```python
+  # 核心第五章
+  
+  from surprise import KNNWithMeans
+  from surprise import Dataset, Reader
+  
+  # 数据读取
+  reader = Reader(line_format='user item rating timestamp', sep=',', skip_lines=1)
+  data = Dataset.load_from_file('./ratings.csv', reader=reader)
+  trainset = data.build_full_trainset()
+  
+  # ItemCF 计算得分
+  # 取最相似的用户计算时，只取最相似的k个
+  algo = KNNWithMeans(k=50, sim_options={'user_based': False, 'verbose': 'True'})
+  algo.fit(trainset)
+  
+  uid = str(196)
+  iid = str(302)
+  
+  pred = algo.predict(uid, iid)
+  print(pred)
+  ```
+
+  
+
+* slopeone
+
+  ```python
+  # 使用SlopeOne算法
+  algo = SlopeOne()
+  algo.fit(train_set)
+  # 对指定用户和商品进行评分预测
+  uid = str(196) 
+  iid = str(302) 
+  pred = algo.predict(uid, iid, r_ui=4, verbose=True)
+  ```
+
+  
+
+* SVD
+
+  **funkSVD**: p、q
+
+  **biasSVD**: p q bi bu
+
+  **SVD++**：p q bi bu +隐型行为
+
+  第一个可以用ALS，其余使用SGD
+
+  工具：
+
+  * `class surprise.prediction_algorithms.matrix_factorization.SVD` 
+
+    biasSVD算法
+
+    使用Surprise工具中的SVD
+
+    参数:
+
+    n_factors: k值，默认为100
+
+    n_epochs：迭代次数，默认为20
+
+    **biased：是否使用biasSVD，默认为True；False就是funkSVD**
+
+    verbose:输出当前epoch，默认为False
+
+    reg_all:所有正则化项的统一参数，默认为0.02
+
+    reg_bu：bu的正则化参数，reg_bi：bi的正则化参数
+
+    reg_pu：pu的正则化参数，reg_qi：qi的正则化参数
+
+  * `class surprise.prediction_algorithms.matrix_factorization.SVDpp` 
+
+    SVD++算法
+
+    使用Surprise工具中的SVDpp
+
+    参数:
+
+    n_factors: k值，默认为20
+
+    n_epochs：迭代次数，默认为20
+
+    verbose:输出当前epoch，默认为False
+
+    reg_all:所有正则化项的统一参数，默认为0.02
+
+    reg_bu：bu的正则化参数，reg_bi：bi的正则化参数
+
+    reg_pu：pu的正则化参数，reg_qi：qi的正则化参数
+
+    reg_yj：yj的正则化参数
+
+  ```python
+  # 实战：movelens电影推荐
+  
+  #!pip install surprise
+  from surprise import SVD
+  from surprise import Dataset
+  from surprise.model_selection import cross_validate
+  from surprise import Reader
+  from surprise import accuracy
+  from surprise.model_selection import KFold
+  import pandas as pd
+  import time
+  
+  """
+  from google.colab import drive
+  drive.mount('/content/drive')
+  import os
+  os.chdir("/content/drive/My Drive/Colab Notebooks/")
+  """
+  time1=time.time()
+  
+  # 数据读取
+  reader = Reader(line_format='user item rating timestamp', sep=',', skip_lines=1)
+  data = Dataset.load_from_file('ratings.csv', reader=reader)
+  train_set = data.build_full_trainset()
+  
+  # 使用funkSVD
+  algo = SVD(biased=False)
+  
+  # 定义K折交叉验证迭代器，K=3
+  kf = KFold(n_splits=3)
+  for trainset, testset in kf.split(data):
+      # 训练并预测
+      algo.fit(trainset)
+      predictions = algo.test(testset)
+      # 计算RMSE
+      accuracy.rmse(predictions, verbose=True)
+  
+  uid = str(196)
+  iid = str(302)
+  # 输出uid对iid的预测结果
+  pred = algo.predict(uid, iid, r_ui=4, verbose=True)
+  time2=time.time()
+  print(time2-time1)
+  
+  ```
+
+  
+
+
+
+
+
+
+

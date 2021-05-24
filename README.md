@@ -10,4 +10,5 @@
   - （6）机器学习
   - （7）深度学习及tensorflow2.1
   - （8）推荐系统业务储备
-- 2. 自己做的推荐系统项目与算法大赛![image-20210524162457527](https://user-images.githubusercontent.com/66198938/119349403-b91f7c80-bcd0-11eb-8885-0aaba8cc1bb9.png)
+- 2. 自己做的推荐系统项目与算法大赛
+  

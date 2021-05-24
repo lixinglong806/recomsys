@@ -11,6 +11,7 @@
   - 深度学习及tensorflow2.1
   - 推荐系统业务储备
 - 自己做的推荐系统项目与算法大赛
+  - 推荐系统项目、算法大赛笔记都在本文件资源中
   - 算法大赛1网址：https://tianchi.aliyun.com/competition/entrance/231576/information
   - 算法大赛2网址：https://tianchi.aliyun.com/competition/entrance/231784/information
   - 两场比赛的成绩截图：

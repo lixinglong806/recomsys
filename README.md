@@ -8,7 +8,7 @@
   - 大数据工具：hadoop、hive、hbase、spark、kafka、flume、redis、sqoop
   - 数据分析：numpy、pandas、sklearn
   - 机器学习
-  - 深度学习及tensorflow2.1
+  - 深度学习及tensorflow
   - 推荐系统业务储备
 - 自己做的推荐系统项目与算法大赛
   - 推荐系统项目、算法大赛笔记都在本仓库中
